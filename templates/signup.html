@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sign Up - Pic2Cal</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <div class="auth-container">
+    <h2>Sign Up</h2>
+    <form id="signupForm" method="POST">
+      <input type="email" name="email" placeholder="Email" required>
+
+      <div class="password-wrapper">
+        <input type="password" id="password" name="password" placeholder="Password" required>
+        <i class="fa-solid fa-eye toggle-password" onclick="toggleVisibility('password', this)"></i>
+      </div>
+
+      <div class="password-wrapper">
+        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required>
+        <i class="fa-solid fa-eye toggle-password" onclick="toggleVisibility('confirmPassword', this)"></i>
+      </div>
+
+      <div class="error" id="errorMessage"></div>
+
+      <button type="submit">Sign Up</button>
+    </form>
+    <p>Already have an account? <a href="{{ url_for('login') }}">Login</a></p>
+  </div>
+
+  <script>
+    const form = document.getElementById('signupForm');
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirmPassword');
+    const errorMessage = document.getElementById('errorMessage');
+
+    // Toggle password visibility
+    function toggleVisibility(id, icon) {
+      const input = document.getElementById(id);
+      const isPassword = input.type === 'password';
+
+      input.type = isPassword ? 'text' : 'password';
+
+      icon.classList.toggle('fa-eye');
+      icon.classList.toggle('fa-eye-slash');
+    }
+
+    // Check password match on form submission
+    form.addEventListener('submit', function (e) {
+      if (password.value !== confirmPassword.value) {
+        e.preventDefault();
+        errorMessage.textContent = "Passwords do not match.";
+      }
+    });
+  </script>
+</body>
+</html>

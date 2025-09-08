@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Scan Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/result.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Scan Result</h1>
+
+        {% if uploaded_filename %}
+            <img src="{{ url_for('static', filename='uploads/' ~ uploaded_filename) }}" width="300" alt="Uploaded Food">
+        {% elif image_url %}
+            <img src="{{ image_url }}" width="300" alt="Food from URL">
+        {% endif %}
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Food Item</th>
+                    <th>Calories (kcal)</th>
+                    <th>Protein (g)</th>
+                    <th>Fat (g)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in result.food_items %}
+                    <tr>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.calories }}</td>
+                        <td>{{ item.protein }}</td>
+                        <td>{{ item.fat }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <p class="total"><strong>Total Calories:</strong> {{ result.total }} kcal</p>
+
+        {% if result.food_items[0].name == "Unknown food" %}
+            <p class="reasoning">{{ result.reasoning }}</p>
+        {% endif %}
+
+        <a class="btn" href="{{ url_for('index') }}">🔄 Scan another meal</a>
+    </div>
+</body>
+</html>

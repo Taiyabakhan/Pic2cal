@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pic2Cal - Calorie Counter</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/calorie.css') }}" />
+  <style>
+    /* Your existing styles here */
+    /* Add some spacing for date picker */
+    .date-picker {
+      margin: 15px 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">📸 Pic2Cal</div>
+    <ul class="nav-links">
+      <li><a href="{{ url_for('index') }}">Home</a></li>
+      <li><a href="{{ url_for('calorie_counter') }}">Calorie-counter</a></li>
+    </ul>
+  </nav>
+
+  <!-- Tracker -->
+  <div class="tracker-container">
+    <h2>Set Your Daily Limits</h2>
+    <div class="input-group date-picker">
+      <label for="date">Select Date:</label>
+      <input type="date" id="date" />
+    </div>
+    <div class="input-group">
+      <input type="number" id="calories" placeholder="Calories (kcal)" min="0" step="any" />
+    </div>
+    <div class="input-group">
+      <input type="number" id="protein" placeholder="Protein (g)" min="0" step="any" />
+    </div>
+    <div class="input-group">
+      <input type="number" id="fat" placeholder="Fat (g)" min="0" step="any" />
+    </div>
+    <button class="btn save" id="saveBtn" onclick="saveLimits()" disabled>Save Limits</button>
+    <button class="btn clear" onclick="clearAll()">Clear All</button>
+
+    <div id="results" class="results">
+      <p>No data saved yet...</p>
+    </div>
+  </div>
+
+  <script>
+    const currentUser = "{{ user|safe }}";
+
+    const dateInput = document.getElementById("date");
+    const caloriesInput = document.getElementById("calories");
+    const proteinInput = document.getElementById("protein");
+    const fatInput = document.getElementById("fat");
+    const saveBtn = document.getElementById("saveBtn");
+    const resultsBox = document.getElementById("results");
+
+    // Set date input to today by default
+    function setTodayDate() {
+      const today = new Date().toISOString().split("T")[0];
+      dateInput.value = today;
+    }
+
+    function inputsHaveValue() {
+      return (
+        caloriesInput.value.trim() !== "" ||
+        proteinInput.value.trim() !== "" ||
+        fatInput.value.trim() !== ""
+      );
+    }
+
+    function toggleSaveBtn() {
+      saveBtn.disabled = !inputsHaveValue();
+    }
+
+    async function saveLimits() {
+      const date = dateInput.value;
+      const limits = {
+        date,
+        calories: caloriesInput.value,
+        protein: proteinInput.value,
+        fat: fatInput.value,
+      };
+
+      const res = await fetch("/api/save-limits", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(limits),
+      });
+
+      const result = await res.json();
+      if (res.ok) {
+        displayLimits(limits);
+      } else {
+        alert(result.error || "Failed to save limits.");
+      }
+    }
+
+    function displayLimits(limits) {
+      resultsBox.innerHTML = `
+        <h3>Your Daily Targets for ${dateInput.value}</h3>
+        <p>Calories: ${limits.calories || 0} kcal</p>
+        <p>Protein: ${limits.protein || 0} g</p>
+        <p>Fat: ${limits.fat || 0} g</p>
+      `;
+    }
+
+    function clearAll() {
+      // Only clears the inputs (does NOT remove from backend)
+      caloriesInput.value = "";
+      proteinInput.value = "";
+      fatInput.value = "";
+      resultsBox.innerHTML = "<p>No data saved yet...</p>";
+      toggleSaveBtn();
+    }
+
+    async function loadLimitsForDate() {
+      const date = dateInput.value;
+      if (!date) return;
+
+      const res = await fetch(`/api/get-limits?date=${date}`);
+      const data = await res.json();
+
+      if (res.ok && data.calories !== undefined) {
+        caloriesInput.value = data.calories;
+        proteinInput.value = data.protein;
+        fatInput.value = data.fat;
+        displayLimits(data);
+      } else {
+        caloriesInput.value = "";
+        proteinInput.value = "";
+        fatInput.value = "";
+        resultsBox.innerHTML = "<p>No data saved yet...</p>";
+      }
+
+      toggleSaveBtn();
+    }
+
+    // Event listeners
+    [caloriesInput, proteinInput, fatInput].forEach((input) => {
+      input.addEventListener("input", toggleSaveBtn);
+    });
+
+    dateInput.addEventListener("change", loadLimitsForDate);
+
+    // Initialize
+    window.onload = () => {
+      setTodayDate();
+      loadLimitsForDate();
+    };
+  </script>
+
+</body>
+</html>

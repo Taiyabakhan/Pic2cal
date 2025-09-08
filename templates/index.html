@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pic2Cal - Calorie Scanner</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <style>
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body>
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="flash-messages">
+        {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %}
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">📸 Pic2Cal</div>
+        <!-- Hamburger icon for small screens -->
+        <div class="hamburger" onclick="toggleMenu()">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#homeSection">Home</a></li>
+            <li><a href="#insightsSection">Features</a></li>
+            <li><a href="#contactSection">Contact Us</a></li>
+            <li><a href="{{ url_for('calorie_counter') }}">Calorie-counter</a></li>
+            {% if 'user' in session %}
+                <li><a href="{{ url_for('logout') }}">Logout ({{ session['user'] }})</a></li>
+                {% else %}
+                <li><a href="{{ url_for('login') }}">Login</a></li>
+            {% endif %}
+            <!-- Auth links inserted by JS -->
+        </ul>
+    </nav>
+
+    <!-- Hero Section (Home) -->
+    <section id="homeSection" class="hero">
+        <div class="hero-text">
+            <h1>Snap Your Meal.<span class="highlight">Know the Deal</span></h1>
+            <p>Upload a photo of your meal, and let Pic2Cal estimate calories and nutrients instantly.</p>
+
+            <!-- Upload Form -->
+            <form id="uploadForm" method="POST" action="/scan" enctype="multipart/form-data">
+                <label for="fileInput" class="btn upload-btn">📤 Upload</label>
+                <input type="file" name="file" id="fileInput" accept="image/*" hidden />
+                <div class="or-separator">------------------------OR--------------------------</div>
+
+                <input type="text" name="image_url" class="input-url" placeholder="Enter image URL" />
+
+                <button type="submit" class="btn scan-btn">🔎 Scan Now</button>
+                <!-- Upload confirmation message -->
+                <div id="uploadMessage" style="margin-top:10px; font-weight:bold;"></div>
+
+            </form>
+        </div>
+
+        <div class="hero-image">
+            <img src="{{ url_for('static', filename='images/bgphoto.jpg') }}" alt="Calorie Scanner" />
+        </div>
+    </section>
+
+    <!-- Product Insights Section (Features) -->
+   <section id="insightsSection" class="insights-section">
+        <h2>Discover Nutritional Insights Instantly</h2>
+        <p>Whether it’s packaged goods or homemade meals, Pic2Cal provides accurate and personalized nutrition data — right at your fingertips.</p>
+        
+        <div class="insights-cards">
+            <div class="card packed">
+                <h3>Packaged Food Products</h3>
+                <p>
+                    Simply scan the barcode or label of any packaged food to unlock detailed nutrition facts, allergen warnings, ingredient lists, 
+                    and tailored dietary suggestions that fit your health goals.
+                </p>
+            </div>
+            <div class="card cooked">
+                <h3>Home-Cooked & Restaurant Meals</h3>
+                <p>
+                    Capture photos of your home-cooked dishes or restaurant orders and get AI-powered estimates of calories, macros, and nutrients — 
+                    helping you stay on track without guesswork.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer (Contact Us) -->
+    <footer id="contactSection" class="footer">
+        <div class="footer-content">
+            <div class="footer-left">
+                <div class="footer-logo">📸 Pic2Cal</div>
+                <p class="footer-tagline">Your AI-powered calorie companion</p>
+            </div>
+
+            <div class="footer-middle">
+                <p>📧 <a href="mailto:support@pic2cal.com">support@pic2cal.com</a></p>
+                <p>📞 <a href="tel:+919999999999">+91-9999999999</a></p>
+                <p><a href="#contactSection">Contact Us</a></p>
+            </div>
+
+            <div class="footer-right">
+                <p>👨‍💻 Created by <strong>Taiyaba Khan</strong></p>
+                <p>© 2025 Pic2Cal. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <!-- JavaScript to toggle the navbar -->
+    <script>
+        function toggleMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('active');
+        }
+        document.addEventListener("DOMContentLoaded", () => {
+        const fileInput = document.getElementById("fileInput");
+        const urlInput = document.querySelector("input[name='image_url']");
+        const uploadMessage = document.getElementById("uploadMessage");
+        const scanBtn = document.querySelector(".scan-btn");
+
+        scanBtn.disabled = true;
+
+        function updateScanButton() {
+            scanBtn.disabled = !(fileInput.files.length > 0 || urlInput.value.trim() !== "");
+        }
+
+        fileInput.addEventListener("change", () => {
+            if (fileInput.files && fileInput.files.length > 0) {
+                const fileName = fileInput.files[0].name;
+                uploadMessage.textContent = `✅ Photo uploaded: ${fileName}`;
+                uploadMessage.style.color = "green";
+            }
+            updateScanButton();
+        });
+
+        urlInput.addEventListener("input", () => {
+            if (urlInput.value.trim() !== "") {
+                uploadMessage.textContent = "✅ Image URL entered!";
+                uploadMessage.style.color = "green";
+            }
+            updateScanButton();
+        });
+
+        document.getElementById("uploadForm").addEventListener("submit", (e) => {
+            if (!(fileInput.files && fileInput.files.length > 0) && urlInput.value.trim() === "") {
+                e.preventDefault();
+                uploadMessage.textContent = "⚠️ Please select an image or enter a URL before scanning!";
+                uploadMessage.style.color = "red";
+                scanBtn.focus();
+            }
+        });
+    });
+    </script>
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</body>
+</html>

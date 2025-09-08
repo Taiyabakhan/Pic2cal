@@ -1,0 +1,155 @@
+/* General body and font */
+body {
+  font-family: Arial, sans-serif;
+  background: #f9f9f9;
+  margin: 0;
+  padding: 0;
+}
+
+/* Navbar */
+.navbar {
+    background-color: #1a1a1a;
+    color: #f0f0f0;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+}
+
+.nav-links li a {
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: 0.3s;
+  color: #f0f0f0; /* ✅ Ensures visibility on dark background */
+  text-decoration: none;
+}
+
+.nav-links li a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Tracker Container */
+.tracker-container {
+  max-width: 450px;
+  margin: 80px auto 40px auto;
+  padding: 25px 30px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.tracker-container h2 {
+  margin-bottom: 15px;
+  color: #1a73e8;
+  user-select: none;
+}
+
+/* Input Groups */
+.input-group {
+  margin: 12px 0;
+  text-align: left;
+}
+
+.input-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #333;
+  user-select: none;
+}
+
+.input-group input[type="number"],
+.input-group input[type="date"] {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+.input-group input[type="number"]:focus,
+.input-group input[type="date"]:focus {
+  border-color: #1a73e8;
+  outline: none;
+}
+
+/* Date picker specific spacing */
+.date-picker {
+  margin: 20px 0;
+}
+
+/* Buttons */
+.btn {
+  padding: 10px 20px;
+  margin: 12px 8px 0 8px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.3s ease;
+}
+
+.btn.save {
+  background-color: #1a73e8;
+  color: white;
+}
+
+.btn.save:disabled {
+  background-color: #a1c2f7;
+  cursor: not-allowed;
+}
+
+.btn.save:not(:disabled):hover {
+  background-color: #155ab6;
+}
+
+.btn.clear {
+  background-color: #e63946;
+  color: white;
+}
+
+.btn.clear:hover {
+  background-color: #b02a35;
+}
+
+/* Results Box */
+.results {
+  margin-top: 25px;
+  padding: 15px 20px;
+  background-color: #f1f1f1;
+  border-radius: 6px;
+  color: #222;
+  text-align: left;
+  user-select: none;
+}
+
+.results h3 {
+  margin-top: 0;
+  color: #1a73e8;
+  font-weight: 700;
+}
+
+.results p {
+  margin: 6px 0;
+  font-size: 16px;
+}
