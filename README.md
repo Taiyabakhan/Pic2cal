@@ -113,7 +113,6 @@ Contributions are welcome! If you want to contribute, please:
 
 ## 📌 Contact
 
-**Taiyaba Khan**
+**Taiyaba Khan** 
 Bareilly, Uttar Pradesh
 Email: khantaiyaba610@gmail.com
-````
