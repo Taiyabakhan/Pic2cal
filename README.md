@@ -1,4 +1,4 @@
-# Pic2Cal - pIicture to calorie analyzer
+# Pic2Cal - picture to calorie analyzer
 
 **AI-Powered Calorie Estimator from Images**
 
