@@ -97,7 +97,21 @@ Pic2Cal/
 4.  Optional: upload more images for testing / demonstration.
 
 ---
+## 🖼️ Live Web App Prediction Example
 
+Here’s how the web app looks when making a prediction:
+
+![Web App Prediction](images/webapp_prediction.png)
+
+![Home Page](https://github.com/Taiyabakhan/Pic2cal/blob/main/Screenshot%20(151).png)
+![Home Page](https://github.com/Taiyabakhan/Pic2cal/blob/main/Screenshot%20(146).png)
+## Prediction Example
+![Prediction Example](https://github.com/Taiyabakhan/Pic2cal/blob/main/Screenshot%20(155).png)
+![Prediction Example](https://github.com/Taiyabakhan/Pic2cal/blob/main/Screenshot%20(143).png)
+## Calorie Counter
+![Calorie COunter](https://github.com/Taiyabakhan/Pic2cal/blob/main/Screenshot%20(153).png)
+
+---
 ## 🤝 Contribution
 
 Contributions are welcome! If you want to contribute, please:
